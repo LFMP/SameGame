@@ -18,7 +18,7 @@ typedef struct tipo_lista{
 }mesa;
 
 int obter_posicao(int coluna, int linha){
-	return ((MAX_LIN*linha) - (MAX_COL-coluna));
+	return ((MAX_LIN*(linha+1)) - (MAX_COL - (coluna+1) - 1));
 }
 
 int obter_acima(int atual){ //retorna qual é a posição "acima" de um elemento
@@ -34,13 +34,13 @@ int obter_abaixo(int atual){ //retorna qual é a posicão "abaixo" de um element
 }
 
 int obter_esq(int atual){ //retorna qual é a posição "à esquerda" de um elemento
-	if(atual%MAX_COL == 0) //termina em 0, ou seja, coluna 0
+	if(atual%MAX_COL == 0) //se atual está na primeira coluna
 		return -1; //caso estivermos na primeira coluna
 	else return atual - 1;
 }
 
 int obter_dir(int atual){
-	if(atual%MAX_COL == 9) //termina em 9, ou seja, coluna 9
+	if(atual%MAX_COL == MAX_COL-1) //se atual está na última coluna
 		return -1; //caso estivermos na ultima coluna
 	else return atual + 1;
 }
