@@ -19,7 +19,7 @@ using namespace std;
 
 typedef struct tipo_item{
 	int acima, abaixo, dir, esq;
-	string atual;
+	string cor;
 }item;
 
 typedef struct tipo_lista{
@@ -81,7 +81,7 @@ string obter_cor(int atual){ //essa função retorna uma constante que contém u
 void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
 	for(int i=0; i<TAM; i++){
-		m->item[i].atual = obter_cor(rand()%5);
+		m->item[i].cor = obter_cor(rand()%5);
 		m->item[i].acima = obter_acima(i);
 		m->item[i].abaixo = obter_abaixo(i);
 		m->item[i].esq = obter_esq(i);
@@ -99,9 +99,23 @@ void mostra_mesa(mesa* m){ //função usada para printar a mesa na tela
 	for(int coluna=0; coluna<MAX_LIN; coluna++){
 		cout << coluna << "  ";
 		for(int linha=0; linha<MAX_COL; linha++){
-			cout << m->item[obter_posicao(coluna, linha)].atual << NORMAL;
+			cout << m->item[obter_posicao(coluna, linha)].cor << NORMAL;
 		}
 		cout << endl;
+	}
+}
+
+void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vazios para cima
+	int posicao;
+
+	for(int linha=0; linha<MAX_LIN; linha++){
+		for(int coluna=0; coluna<MAX_COL; coluna++){
+			posicao = obter_posicao(coluna, linha);
+			if(m->item[posicao].cor == VAZIO && obter_acima(posicao) != -1){
+				m->item[posicao].cor = m->item[obter_acima(posicao)].cor;
+				m->item[obter_acima(posicao)].cor = VAZIO;
+			}
+		}
 	}
 }
 
