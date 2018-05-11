@@ -25,7 +25,7 @@ typedef struct tipo_lista{
 }mesa;
 
 int obter_posicao(int coluna, int linha){
-	return ((MAX_LIN*(linha+1)) - (MAX_COL - (coluna+1) - 1));
+	return ((MAX_LIN*(linha+1)) - (MAX_COL - (coluna+1)) - 1);
 }
 
 int obter_acima(int atual){ //retorna qual é a posição "acima" de um elemento
