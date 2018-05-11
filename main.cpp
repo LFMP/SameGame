@@ -15,6 +15,8 @@ using namespace std;
 #define ROXO "\033[1;35m|00|"
 #define VAZIO "\033[1m     "
 
+//SAME GAME - IMPLEMENTADO COM C/C++ - DESENVOLVIDO PARA LINUX
+
 typedef struct tipo_item{
 	int acima, abaixo, dir, esq;
 	string atual;
@@ -52,7 +54,7 @@ int obter_dir(int atual){
 	else return atual + 1;
 }
 
-string obter_cor(int atual){
+string obter_cor(int atual){ //essa função retorna uma constante que contém uma cor. A chamada é feita com um número aleatório de 0 a 5
 	switch(atual){
 		case 0:
 			return VERMELHO;
@@ -76,7 +78,7 @@ string obter_cor(int atual){
 	}
 }
 
-void prepara_mesa(mesa* m){
+void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
 	for(int i=0; i<TAM; i++){
 		m->item[i].atual = obter_cor(rand()%5);
@@ -87,7 +89,7 @@ void prepara_mesa(mesa* m){
 	}
 }
 
-void mostra_mesa(mesa* m){
+void mostra_mesa(mesa* m){ //função usada para printar a mesa na tela
 	cout << " ";
 	for(int i=0; i<MAX_COL; i++){
 		cout << "   " << i;
