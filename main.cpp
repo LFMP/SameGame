@@ -53,8 +53,7 @@ int obter_dir(int atual){
 }
 
 string obter_cor(int atual){
-	//atual = rand()%6;
-	switch(atual%6){
+	switch(atual){
 		case 0:
 			return VERMELHO;
 		break;
@@ -74,17 +73,13 @@ string obter_cor(int atual){
 		case 4:
 			return ROXO;
 		break;
-
-		default:
-			return VERMELHO;
-		break;
 	}
 }
 
 void prepara_mesa(mesa* m){
 	srand(time(NULL));
 	for(int i=0; i<TAM; i++){
-		m->item[i].atual = obter_cor(i);
+		m->item[i].atual = obter_cor(rand()%5);
 		m->item[i].acima = obter_acima(i);
 		m->item[i].abaixo = obter_abaixo(i);
 		m->item[i].esq = obter_esq(i);
@@ -97,7 +92,7 @@ void mostra_mesa(mesa* m){
 	for(int j=0; j<MAX_LIN; j++){
 		cout << j << "  ";
 		for(int i=0; i<MAX_COL; i++){
-			cout << m->item[i].atual << NORMAL;
+			cout << m->item[obter_posicao(j,i)].atual << NORMAL;
 		}
 		cout << endl;
 	}
