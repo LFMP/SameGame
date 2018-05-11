@@ -7,10 +7,17 @@ using namespace std;
 #define MAX_COL 10 //número máximo de colunas da mesa
 #define MAX_LIN 10 //número máximo de linhas da mesa
 #define TAM MAX_COL*MAX_LIN //com base no numero de colunas e linhas, define o tamanho máximo da linha estática
-#define VERMELHO 4
+#define NORMAL "\033[0m"
+#define VERMELHO "\033[1;31m|000|"
+#define VERDE "\033[1;32m|000|"
+#define AMARELO "\033[1;33m|000|"
+#define AZUL "\033[1;34m|000|"
+#define ROXO "\033[1;35m|000|"
+#define VAZIO "\033[1m     "
 
 typedef struct tipo_item{
-	int item, acima, abaixo, dir esq;
+	int acima, abaixo, dir, esq;
+	string atual;
 }item;
 
 typedef struct tipo_lista{
@@ -45,9 +52,39 @@ int obter_dir(int atual){
 	else return atual + 1;
 }
 
+string obter_cor(int atual){
+	//atual = rand()%6;
+	switch(atual%6){
+		case 0:
+			return VERMELHO;
+		break;
+
+		case 1:
+			return VERDE;
+		break;
+
+		case 2:
+			return AMARELO;
+		break;
+
+		case 3:
+			return AZUL;
+		break;
+
+		case 4:
+			return ROXO;
+		break;
+
+		default:
+			return VERMELHO;
+		break;
+	}
+}
+
 void prepara_mesa(mesa* m){
+	srand(time(NULL));
 	for(int i=0; i<TAM; i++){
-		m->item[i].item = VERMELHO;
+		m->item[i].atual = obter_cor(i);
 		m->item[i].acima = obter_acima(i);
 		m->item[i].abaixo = obter_abaixo(i);
 		m->item[i].esq = obter_esq(i);
@@ -56,12 +93,19 @@ void prepara_mesa(mesa* m){
 }
 
 void mostra_mesa(mesa* m){
-	cout << "  1  2  3  4  5  6  7  8  9" << endl;
+	cout << "     0    1    2    3    4    5    6    7    8    9" << endl;
 	for(int j=0; j<MAX_LIN; j++){
 		cout << j << "  ";
 		for(int i=0; i<MAX_COL; i++){
-			cout << m->item[i].item << " ";
+			cout << m->item[i].atual << NORMAL;
 		}
 		cout << endl;
 	}
+}
+
+int main(){
+	mesa Jogo;
+
+	prepara_mesa(&Jogo);
+	mostra_mesa(&Jogo);
 }
