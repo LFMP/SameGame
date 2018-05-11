@@ -8,11 +8,11 @@ using namespace std;
 #define MAX_LIN 10 //número máximo de linhas da mesa
 #define TAM MAX_COL*MAX_LIN //com base no numero de colunas e linhas, define o tamanho máximo da linha estática
 #define NORMAL "\033[0m"
-#define VERMELHO "\033[1;31m|000|"
-#define VERDE "\033[1;32m|000|"
-#define AMARELO "\033[1;33m|000|"
-#define AZUL "\033[1;34m|000|"
-#define ROXO "\033[1;35m|000|"
+#define VERMELHO "\033[1;31m|00|"
+#define VERDE "\033[1;32m|00|"
+#define AMARELO "\033[1;33m|00|"
+#define AZUL "\033[1;34m|00|"
+#define ROXO "\033[1;35m|00|"
 #define VAZIO "\033[1m     "
 
 typedef struct tipo_item{
@@ -88,11 +88,16 @@ void prepara_mesa(mesa* m){
 }
 
 void mostra_mesa(mesa* m){
-	cout << "     0    1    2    3    4    5    6    7    8    9" << endl;
-	for(int j=0; j<MAX_LIN; j++){
-		cout << j << "  ";
-		for(int i=0; i<MAX_COL; i++){
-			cout << m->item[obter_posicao(j,i)].atual << NORMAL;
+	cout << " ";
+	for(int i=0; i<MAX_COL; i++){
+		cout << "   " << i;
+	}
+	cout << endl;
+	
+	for(int coluna=0; coluna<MAX_LIN; coluna++){
+		cout << coluna << "  ";
+		for(int linha=0; linha<MAX_COL; linha++){
+			cout << m->item[obter_posicao(coluna, linha)].atual << NORMAL;
 		}
 		cout << endl;
 	}
