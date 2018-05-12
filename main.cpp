@@ -90,30 +90,36 @@ void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores ale
 }
 
 void mostra_mesa(mesa* m){ //função usada para printar a mesa na tela
-	cout << " ";
+	cout << "   ";
 	for(int i=0; i<MAX_COL; i++){
-		cout << "   " << i;
+		if(i < 10)
+			cout << "  0" << i;
+		else cout << "  " << i;
 	}
 	cout << endl;
-	
-	for(int coluna=0; coluna<MAX_LIN; coluna++){
-		cout << coluna << "  ";
-		for(int linha=0; linha<MAX_COL; linha++){
-			cout << m->item[obter_posicao(coluna, linha)].cor << NORMAL;
-		}
-		cout << endl;
-	}
+
+    for(int linha=0; linha<MAX_LIN; linha++){
+        if(linha < 10)
+            cout << "0" << linha << "  ";
+        else cout << linha << "  ";
+        for(int coluna=0; coluna<MAX_COL; coluna++){
+            cout << m->item[obter_posicao(coluna, linha)].cor << NORMAL;
+        }
+        cout << endl;
+    }
 }
 
 void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vazios para cima
 	int posicao;
 
-	for(int linha=0; linha<MAX_LIN; linha++){
-		for(int coluna=0; coluna<MAX_COL; coluna++){
-			posicao = obter_posicao(coluna, linha);
-			if(m->item[posicao].cor == VAZIO && obter_acima(posicao) != -1){
-				m->item[posicao].cor = m->item[obter_acima(posicao)].cor;
-				m->item[obter_acima(posicao)].cor = VAZIO;
+	for(int k=0; k<MAX_LIN; k++){
+		for(int linha=0; linha<MAX_LIN; linha++){
+			for(int coluna=0; coluna<MAX_COL; coluna++){
+				posicao = obter_posicao(coluna, linha);
+				if(m->item[posicao].cor == VAZIO && obter_acima(posicao) != -1){
+					m->item[posicao].cor = m->item[obter_acima(posicao)].cor;
+					m->item[obter_acima(posicao)].cor = VAZIO;
+				}
 			}
 		}
 	}
