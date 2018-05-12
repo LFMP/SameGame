@@ -125,6 +125,35 @@ void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vaz
 	}
 }
 
+void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para remover elementos iguais de uma região recursivamente
+    string cor_atual = m->item[posicao].cor;
+
+    if(cor_atual == m->item[m->item[posicao].acima].cor){
+        flag = 1;
+        m->item[posicao].cor = VAZIO;
+        remove_itens(m, obter_acima(posicao), flag);
+    }
+    if(cor_atual == m->item[m->item[posicao].abaixo].cor){
+        flag = 1;
+        m->item[posicao].cor = VAZIO;
+        remove_itens(m, obter_abaixo(posicao), flag);
+    }
+    if(cor_atual == m->item[m->item[posicao].esq].cor){
+        flag = 1;
+        m->item[posicao].cor = VAZIO;
+        remove_itens(m, obter_esq(posicao), flag);
+    }
+    if(cor_atual == m->item[m->item[posicao].dir].cor){
+        flag = 1;
+        m->item[posicao].cor = VAZIO;
+        remove_itens(m, obter_dir(posicao), flag);
+    }
+    if(flag) {
+        m->item[posicao].cor = VAZIO;
+    }
+}
+
+
 int main(){
 	mesa Jogo;
 
