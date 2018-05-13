@@ -155,12 +155,15 @@ int main(){
 
 	prepara_mesa(&Jogo);
 	mostra_mesa(&Jogo);
-	int i=0,j=0;
+	int linha=0, coluna=0;
 
 	do{
-		scanf("%d %d", &i, &j);
-		remove_itens(&Jogo, obter_posicao(i,j),1);
+		cout << "Linha: ";
+		cin >> linha;
+		cout << "Coluna: ";
+		cin >> coluna;
+		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		mostra_mesa(&Jogo);
-	}while(i >= 0 && j >=0);
+	}while(linha >= 0 && coluna >=0);
 }
