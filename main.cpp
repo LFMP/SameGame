@@ -140,9 +140,9 @@ void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vaz
 		for(int linha=0; linha<MAX_LIN; linha++){
 			for(int coluna=0; coluna<MAX_COL; coluna++){
 				posicao = obter_posicao(coluna, linha);
-				if(m->item[posicao].cor == VAZIO && obter_acima(posicao) != -1){
-					m->item[posicao].cor = m->item[obter_acima(posicao)].cor;
-					m->item[obter_acima(posicao)].cor = VAZIO;
+				if(m->item[posicao].cor == VAZIO && m->item[posicao].acima != -1){
+					m->item[posicao].cor = m->item[m->item[posicao].acima].cor;
+					m->item[m->item[posicao].acima].cor = VAZIO;
 				}
 			}
 		}
