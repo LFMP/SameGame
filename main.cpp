@@ -109,6 +109,30 @@ void mostra_mesa(mesa* m){ //função usada para printar a mesa na tela
 	}
 }
 
+int coluna_vazia(mesa* m, int coluna){ //função utilizada para saber se uma coluna está totalmente vazia
+    for(int item_col = obter_posicao(coluna, 0); item_col<TAM; item_col += MAX_LIN){
+        if(m->item[item_col].cor != VAZIO)
+            return 0; //caso a coluna não esteja vazia, o retorno é falso
+    }
+    return 1; //a função retorna verdadeiro caso a coluna esteja vazia
+}
+
+void mover_colunas_vazias(mesa* m){ //função utilizada para "puxar" colunas vazias para a direita
+    int posicao;
+
+    for(int n=0; n<MAX_COL; n++){
+	    for(int coluna=0; coluna<MAX_COL; coluna++){
+	        if(coluna_vazia(m, coluna) && coluna%MAX_COL != MAX_COL-1){
+	            for(int linha=0; linha<MAX_LIN; linha++){
+	                posicao = obter_posicao(coluna, linha);
+	                m->item[posicao].cor = m->item[m->item[posicao].dir].cor;
+	                m->item[m->item[posicao].dir].cor = VAZIO;
+	            }
+	        }
+	    }
+	}
+}
+
 void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vazios para cima
 	int posicao;
 
@@ -123,6 +147,7 @@ void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vaz
 			}
 		}
 	}
+	mover_colunas_vazias(m);
 }
 
 void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para remover elementos iguais de uma região recursivamente
@@ -155,12 +180,15 @@ int main(){
 
 	prepara_mesa(&Jogo);
 	mostra_mesa(&Jogo);
-	int i=0,j=0;
+	int linha=0, coluna=0;
 
 	do{
-		scanf("%d %d", &i, &j);
-		remove_itens(&Jogo, obter_posicao(i,j),1);
+		cout << "Linha: ";
+		cin >> linha;
+		cout << "Coluna: ";
+		cin >> coluna;
+		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		mostra_mesa(&Jogo);
-	}while(i >= 0 && j >=0);
+	}while(linha >= 0 && coluna >=0);
 }
