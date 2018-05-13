@@ -158,29 +158,29 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 	}
 	if(cor_atual == m->item[m->item[posicao].acima].cor){
 		flag = 1;
-		remove_itens(m, obter_acima(posicao), flag);
+		remove_itens(m, m->item[posicao].acima, flag);
 	}
 	if(cor_atual == m->item[m->item[posicao].abaixo].cor){
 		flag = 1;
-		remove_itens(m, obter_abaixo(posicao), flag);
+		remove_itens(m, m->item[posicao].abaixo, flag);
 	}
 	if(cor_atual == m->item[m->item[posicao].esq].cor){
 		flag = 1;
-		remove_itens(m, obter_esq(posicao), flag);
+		remove_itens(m, m->item[posicao].esq, flag);
 	}
 	if(cor_atual == m->item[m->item[posicao].dir].cor){
 		flag = 1;
-		remove_itens(m, obter_dir(posicao), flag);
+		remove_itens(m, m->item[posicao].dir, flag);
 	}
 }
 
 
 int main(){
 	mesa Jogo;
-
-	prepara_mesa(&Jogo);
-	mostra_mesa(&Jogo);
 	int linha=0, coluna=0;
+	
+	prepara_mesa(&Jogo);
+	mostra_mesa(&Jogo);			
 
 	do{
 		cout << "Linha: ";
@@ -189,6 +189,7 @@ int main(){
 		cin >> coluna;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
+		system("clear");
 		mostra_mesa(&Jogo);
 	}while(linha >= 0 && coluna >=0);
 }
