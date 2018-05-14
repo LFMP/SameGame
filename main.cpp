@@ -153,24 +153,26 @@ void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vaz
 void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para remover elementos iguais de uma região recursivamente
 	string cor_atual = m->item[posicao].cor;
 
-	if(flag) {
-		m->item[posicao].cor = VAZIO;
-	}
-	if(cor_atual == m->item[m->item[posicao].acima].cor){
-		flag = 1;
-		remove_itens(m, m->item[posicao].acima, flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].abaixo].cor){
-		flag = 1;
-		remove_itens(m, m->item[posicao].abaixo, flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].esq].cor){
-		flag = 1;
-		remove_itens(m, m->item[posicao].esq, flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].dir].cor){
-		flag = 1;
-		remove_itens(m, m->item[posicao].dir, flag);
+	if(cor_atual != VAZIO) {
+		if (flag) {
+			m->item[posicao].cor = VAZIO;
+		}
+		if (cor_atual == m->item[m->item[posicao].acima].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].acima, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].abaixo].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].abaixo, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].esq].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].esq, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].dir].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].dir, flag);
+		}
 	}
 }
 
