@@ -182,12 +182,7 @@ int main(){
 	int linha=0, coluna=0;
 	
 	prepara_mesa(&Jogo);
-<<<<<<< HEAD
-	mostra_mesa(&Jogo);
-	int linha=0, coluna=0;
-=======
 	mostra_mesa(&Jogo);			
->>>>>>> playground
 
 	do{
 		cout << "Linha: ";
