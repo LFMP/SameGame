@@ -109,6 +109,30 @@ void mostra_mesa(mesa* m){ //função usada para printar a mesa na tela
 	}
 }
 
+int coluna_vazia(mesa* m, int coluna){ //função utilizada para saber se uma coluna está totalmente vazia
+    for(int item_col = obter_posicao(coluna, 0); item_col<TAM; item_col += MAX_LIN){
+        if(m->item[item_col].cor != VAZIO)
+            return 0; //caso a coluna não esteja vazia, o retorno é falso
+    }
+    return 1; //a função retorna verdadeiro caso a coluna esteja vazia
+}
+
+void mover_colunas_vazias(mesa* m){ //função utilizada para "puxar" colunas vazias para a direita
+    int posicao;
+
+    for(int n=0; n<MAX_COL; n++){
+	    for(int coluna=0; coluna<MAX_COL; coluna++){
+	        if(coluna_vazia(m, coluna) && coluna%MAX_COL != MAX_COL-1){
+	            for(int linha=0; linha<MAX_LIN; linha++){
+	                posicao = obter_posicao(coluna, linha);
+	                m->item[posicao].cor = m->item[m->item[posicao].dir].cor;
+	                m->item[m->item[posicao].dir].cor = VAZIO;
+	            }
+	        }
+	    }
+	}
+}
+
 void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vazios para cima
 	int posicao;
 
@@ -116,46 +140,54 @@ void reorganiza_coluna(mesa* m){ //função utilizada para "puxar" elementos vaz
 		for(int linha=0; linha<MAX_LIN; linha++){
 			for(int coluna=0; coluna<MAX_COL; coluna++){
 				posicao = obter_posicao(coluna, linha);
-				if(m->item[posicao].cor == VAZIO && obter_acima(posicao) != -1){
-					m->item[posicao].cor = m->item[obter_acima(posicao)].cor;
-					m->item[obter_acima(posicao)].cor = VAZIO;
+				if(m->item[posicao].cor == VAZIO && m->item[posicao].acima != -1){
+					m->item[posicao].cor = m->item[m->item[posicao].acima].cor;
+					m->item[m->item[posicao].acima].cor = VAZIO;
 				}
 			}
 		}
 	}
+	mover_colunas_vazias(m);
 }
 
 void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para remover elementos iguais de uma região recursivamente
 	string cor_atual = m->item[posicao].cor;
 
-	if(flag) {
-		m->item[posicao].cor = VAZIO;
-	}
-	if(cor_atual == m->item[m->item[posicao].acima].cor){
-		flag = 1;
-		remove_itens(m, obter_acima(posicao), flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].abaixo].cor){
-		flag = 1;
-		remove_itens(m, obter_abaixo(posicao), flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].esq].cor){
-		flag = 1;
-		remove_itens(m, obter_esq(posicao), flag);
-	}
-	if(cor_atual == m->item[m->item[posicao].dir].cor){
-		flag = 1;
-		remove_itens(m, obter_dir(posicao), flag);
+	if(cor_atual != VAZIO) {
+		if (flag) {
+			m->item[posicao].cor = VAZIO;
+		}
+		if (cor_atual == m->item[m->item[posicao].acima].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].acima, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].abaixo].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].abaixo, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].esq].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].esq, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].dir].cor) {
+			flag = 1;
+			remove_itens(m, m->item[posicao].dir, flag);
+		}
 	}
 }
 
 
 int main(){
 	mesa Jogo;
-
+	int linha=0, coluna=0;
+	
 	prepara_mesa(&Jogo);
+<<<<<<< HEAD
 	mostra_mesa(&Jogo);
 	int linha=0, coluna=0;
+=======
+	mostra_mesa(&Jogo);			
+>>>>>>> playground
 
 	do{
 		cout << "Linha: ";
@@ -164,6 +196,7 @@ int main(){
 		cin >> coluna;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
+		system("clear");
 		mostra_mesa(&Jogo);
 	}while(linha >= 0 && coluna >=0);
 }
