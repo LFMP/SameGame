@@ -23,6 +23,7 @@ typedef struct tipo_item{
 }item;
 
 typedef struct tipo_lista{
+	int qntd;
 	struct tipo_item item[TAM];
 }mesa;
 
@@ -80,6 +81,7 @@ string obter_cor(int atual){ //essa função retorna uma constante que contém u
 
 void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
+	m->qntd = TAM;
 	for(int i=0; i<TAM; i++){
 		m->item[i].cor = obter_cor(rand()%5);
 		m->item[i].acima = obter_acima(i);
@@ -155,6 +157,7 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 
 	if(cor_atual != VAZIO) {
 		if (flag) {
+			m->qntd--;
 			m->item[posicao].cor = VAZIO;
 		}
 		if (cor_atual == m->item[m->item[posicao].acima].cor) {
