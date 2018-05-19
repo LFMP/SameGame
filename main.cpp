@@ -79,11 +79,24 @@ string obter_cor(int atual){ //essa função retorna uma constante que contém u
 	}
 }
 
-void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
+int definir_dificuldade(int dificuldade){ //retorna o número de cores que vão estar presente na mesa dependendo da escolha do jogador
+    switch(dificuldade){
+        case 1:
+            return 3;
+        case 2:
+            return 4;
+        case 3:
+            return 5;
+        default:
+            return 0;
+    }
+}
+
+void prepara_mesa(mesa* m, int dificuldade){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
 	m->qntd = TAM;
 	for(int i=0; i<TAM; i++){
-		m->item[i].cor = obter_cor(rand()%5);
+		m->item[i].cor = obter_cor(rand()%dificuldade);
 		m->item[i].acima = obter_acima(i);
 		m->item[i].abaixo = obter_abaixo(i);
 		m->item[i].esq = obter_esq(i);
@@ -182,9 +195,18 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 
 int main(){
 	mesa Jogo;
-	int linha=0, coluna=0;
+	int linha = 0, coluna = 0;
+	int dificuldade = 0;
+
+	while(dificuldade == 0){
+	    system("clear");
+        cout << "Escolha a dificuldade do jogo:" << endl;
+        cout << "[1] Facil\n[2] Medio\n[3] Dificil" << endl;
+        cin >> dificuldade;
+        dificuldade = definir_dificuldade(dificuldade);
+    }
 	
-	prepara_mesa(&Jogo);
+	prepara_mesa(&Jogo, dificuldade);
 	mostra_mesa(&Jogo);			
 
 	do{
@@ -196,5 +218,5 @@ int main(){
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
-	}while(linha >= 0 && coluna >=0);
+	}while(Jogo.qntd > 0);
 }
