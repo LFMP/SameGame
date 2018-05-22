@@ -92,6 +92,10 @@ int definir_dificuldade(int dificuldade){ //retorna o número de cores que vão 
     }
 }
 
+int mesa_vazia(mesa* m){
+	return m->qntd == 0;
+}
+
 void prepara_mesa(mesa* m, int dificuldade){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
 	m->qntd = TAM;
@@ -218,5 +222,5 @@ int main(){
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
-	}while(Jogo.qntd > 0);
+	}while(!mesa_vazia(&Jogo));
 }
