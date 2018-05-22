@@ -196,6 +196,29 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 	}
 }
 
+int perdeu(mesa *m, int posicao, int dificuldade, int flag){
+	string cor_atual = m->item[posicao].cor;
+	if (m->qntd <= dificuldade*4 && cor_atual != VAZIO){
+		if (cor_atual == m->item[m->item[posicao].acima].cor) {
+			flag = 0;
+			perdeu(m, m->item[posicao].acima, dificuldade, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].abaixo].cor) {
+			flag = 0;
+			perdeu(m, m->item[posicao].abaixo, dificuldade, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].esq].cor) {
+			flag = 0;
+			perdeu(m, m->item[posicao].esq, dificuldade, flag);
+		}
+		if (cor_atual == m->item[m->item[posicao].dir].cor) {
+			flag = 0;
+			perdeu(m, m->item[posicao].dir, dificuldade, flag);
+		}
+		return flag;		
+	}
+	return 1;
+}
 
 int main(){
 	mesa Jogo;
@@ -218,9 +241,16 @@ int main(){
 		cin >> linha;
 		cout << "Coluna: ";
 		cin >> coluna;
+		if (linha > MAX_LIN || coluna > MAX_COL){
+			continue;
+		}
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
+		if(!perdeu(&Jogo, obter_posicao(coluna, linha), dificuldade, 0)){
+			cout << "PERDEU!\nHAHA OTÁRIO!" <<endl; 
+			break;
+		}
 	}while(!mesa_vazia(&Jogo));
 }
