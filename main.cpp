@@ -245,7 +245,7 @@ int main(){
 	mesa Jogo;
 	int linha = 0, coluna = 0;
 	int dificuldade = 0;
-	int jogadas = 0;
+	int jogadas = 0, time_ini, time_fim;
 
 	while(dificuldade == 0){
 	    system("clear");
@@ -256,7 +256,8 @@ int main(){
     }
 	
 	prepara_mesa(&Jogo, dificuldade);
-	mostra_mesa(&Jogo);			
+	mostra_mesa(&Jogo);
+	time_ini = time(NULL);
 
 	do{
 		cout << "Linha: ";
@@ -271,11 +272,13 @@ int main(){
 		mostra_mesa(&Jogo);
 		jogadas++;
 	}while(!mesa_vazia(&Jogo) && !perdeu(&Jogo));
+	time_fim = time(NULL);
 
 	if(mesa_vazia(&Jogo))
 	    cout << "\033[1;32m\nVOCÊ GANHOU! PARABÉNS!" << NORMAL << endl;
 	else
 	    cout << "\033[1;31m\nVOCÊ PERDEU! MAIS SORTE NA PRÓXIMA!" << NORMAL << endl;
 
-	cout << "\nESTATÍSTICAS: " << endl << "Jogadas: " << jogadas;
+	cout << "\nESTATÍSTICAS: " << endl << "Jogadas: " << jogadas << endl;
+	cout << "Tempo de jogo: " << ((time_fim - time_ini)%3600)/60 << "min:" << ((time_fim - time_ini)%3600)%60 << "seg" << endl;
 }
