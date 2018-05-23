@@ -264,7 +264,7 @@ int main(){
 		cin >> linha;
 		cout << "Coluna: ";
 		cin >> coluna;
-		if(linha > MAX_LIN || coluna > MAX_COL)
+		if(linha >= MAX_LIN || coluna >= MAX_COL)
 			continue;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
