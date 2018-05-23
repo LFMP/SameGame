@@ -220,10 +220,32 @@ int perdeu(mesa *m, int posicao, int dificuldade, int flag){
 	return 1;
 }
 
+int perdeu(mesa* m){
+    int posicao;
+
+    for(int linha=0; linha<MAX_LIN; linha++){
+        for(int coluna=0; coluna<MAX_COL; coluna++){
+            posicao = obter_posicao(coluna, linha);
+            if(m->item[posicao].cor == VAZIO)
+                continue;
+            if(m->item[posicao].cor == m->item[m->item[posicao].acima].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].abaixo].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].esq].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].dir].cor)
+                return 0;
+        }
+    }
+    return 1;
+}
+
 int main(){
 	mesa Jogo;
 	int linha = 0, coluna = 0;
 	int dificuldade = 0;
+	int jogadas = 0;
 
 	while(dificuldade == 0){
 	    system("clear");
@@ -241,16 +263,19 @@ int main(){
 		cin >> linha;
 		cout << "Coluna: ";
 		cin >> coluna;
-		if (linha > MAX_LIN || coluna > MAX_COL){
+		if(linha > MAX_LIN || coluna > MAX_COL)
 			continue;
-		}
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
-		if(!perdeu(&Jogo, obter_posicao(coluna, linha), dificuldade, 0)){
-			cout << "PERDEU!\nHAHA OTÁRIO!" <<endl; 
-			break;
-		}
-	}while(!mesa_vazia(&Jogo));
+		jogadas++;
+	}while(!mesa_vazia(&Jogo) && !perdeu(&Jogo));
+
+	if(mesa_vazia(&Jogo))
+	    cout << "\033[1;32m\nVOCÊ GANHOU! PARABÉNS!" << NORMAL << endl;
+	else
+	    cout << "\033[1;31m\nVOCÊ PERDEU! MAIS SORTE NA PRÓXIMA!" << NORMAL << endl;
+
+	cout << "\nESTATÍSTICAS: " << endl << "Jogadas: " << jogadas;
 }
