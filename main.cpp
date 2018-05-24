@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio_ext.h>
 #include <stdlib.h>
 #include <iostream>
 
@@ -23,6 +24,7 @@ typedef struct tipo_item{
 }item;
 
 typedef struct tipo_lista{
+	int qntd;
 	struct tipo_item item[TAM];
 }mesa;
 
@@ -78,10 +80,28 @@ string obter_cor(int atual){ //essa função retorna uma constante que contém u
 	}
 }
 
-void prepara_mesa(mesa* m){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
+int definir_dificuldade(int dificuldade){ //retorna o número de cores que vão estar presente na mesa dependendo da escolha do jogador
+    switch(dificuldade){
+        case 1:
+            return 3;
+        case 2:
+            return 4;
+        case 3:
+            return 5;
+        default:
+            return 0;
+    }
+}
+
+int mesa_vazia(mesa* m){
+	return m->qntd == 0;
+}
+
+void prepara_mesa(mesa* m, int dificuldade){ //função usada para preencher a mesa com cores aleatórias e posições da região de um item
 	srand(time(NULL));
+	m->qntd = TAM;
 	for(int i=0; i<TAM; i++){
-		m->item[i].cor = obter_cor(rand()%5);
+		m->item[i].cor = obter_cor(rand()%dificuldade);
 		m->item[i].acima = obter_acima(i);
 		m->item[i].abaixo = obter_abaixo(i);
 		m->item[i].esq = obter_esq(i);
@@ -155,6 +175,7 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 
 	if(cor_atual != VAZIO) {
 		if (flag) {
+			m->qntd--;
 			m->item[posicao].cor = VAZIO;
 		}
 		if (cor_atual == m->item[m->item[posicao].acima].cor) {
@@ -176,22 +197,73 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 	}
 }
 
+int perdeu(mesa* m){
+    int posicao;
+
+    for(int linha=0; linha<MAX_LIN; linha++){
+        for(int coluna=0; coluna<MAX_COL; coluna++){
+            posicao = obter_posicao(coluna, linha);
+            if(m->item[posicao].cor == VAZIO)
+                continue;
+            if(m->item[posicao].cor == m->item[m->item[posicao].acima].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].abaixo].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].esq].cor)
+                return 0;
+            if(m->item[posicao].cor == m->item[m->item[posicao].dir].cor)
+                return 0;
+        }
+    }
+    return 1;
+}
 
 int main(){
 	mesa Jogo;
-	int linha=0, coluna=0;
+	int linha = 0, coluna = 0;
+	int dificuldade = 0, x;
+	int jogadas = 0, time_ini, time_fim;
+
+	while(dificuldade == 0){
+	    system("clear");
+        cout << "Escolha a dificuldade do jogo:" << endl;
+        cout << "[1] Facil\n[2] Medio\n[3] Dificil" << endl;
+        cin >> dificuldade;
+        dificuldade = definir_dificuldade(dificuldade);
+    }
 	
-	prepara_mesa(&Jogo);
-	mostra_mesa(&Jogo);			
+	prepara_mesa(&Jogo, dificuldade);
+	mostra_mesa(&Jogo);
+	time_ini = time(NULL);
 
 	do{
 		cout << "Linha: ";
-		cin >> linha;
+		x = scanf("%d", &linha);
+		while(x != 1){
+		    __fpurge(stdin);
+            x = scanf("%d", &linha);
+        }
 		cout << "Coluna: ";
-		cin >> coluna;
+		x = scanf("%d", &coluna);
+		while(x != 1){
+            __fpurge(stdin);
+            x = scanf("%d", &coluna);
+        }
+		if(linha >= MAX_LIN || coluna >= MAX_COL || linha < 0 || coluna < 0)
+			continue;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
-	}while(linha >= 0 && coluna >=0);
+		jogadas++;
+	}while(!mesa_vazia(&Jogo) && !perdeu(&Jogo));
+	time_fim = time(NULL);
+
+	if(mesa_vazia(&Jogo))
+	    cout << "\033[1;32m\nVOCÊ GANHOU! PARABÉNS!" << NORMAL << endl;
+	else
+	    cout << "\033[1;31m\nVOCÊ PERDEU! MAIS SORTE NA PRÓXIMA!" << NORMAL << endl;
+
+	cout << "\nESTATÍSTICAS: " << endl << "Jogadas: " << jogadas << endl;
+	cout << "Tempo de jogo: " << ((time_fim - time_ini)%3600)/60 << "min:" << ((time_fim - time_ini)%3600)%60 << "seg" << endl;
 }
