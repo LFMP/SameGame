@@ -249,7 +249,7 @@ int main(){
             __fpurge(stdin);
             x = scanf("%d", &coluna);
         }
-		if(linha >= MAX_LIN || coluna >= MAX_COL)
+		if(linha >= MAX_LIN || coluna >= MAX_COL || linha < 0 || coluna < 0)
 			continue;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
