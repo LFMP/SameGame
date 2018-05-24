@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio_ext.h>
 #include <stdlib.h>
 #include <iostream>
 
@@ -220,7 +221,7 @@ int perdeu(mesa* m){
 int main(){
 	mesa Jogo;
 	int linha = 0, coluna = 0;
-	int dificuldade = 0;
+	int dificuldade = 0, x;
 	int jogadas = 0, time_ini, time_fim;
 
 	while(dificuldade == 0){
@@ -237,9 +238,17 @@ int main(){
 
 	do{
 		cout << "Linha: ";
-		cin >> linha;
+		x = scanf("%d", &linha);
+		while(x != 1){
+		    __fpurge(stdin);
+            x = scanf("%d", &linha);
+        }
 		cout << "Coluna: ";
-		cin >> coluna;
+		x = scanf("%d", &coluna);
+		while(x != 1){
+            __fpurge(stdin);
+            x = scanf("%d", &coluna);
+        }
 		if(linha >= MAX_LIN || coluna >= MAX_COL)
 			continue;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
