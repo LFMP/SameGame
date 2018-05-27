@@ -197,13 +197,13 @@ void remove_itens(mesa* m, int posicao, int flag){ //função utilizada para rem
 	}
 }
 
-int perdeu(mesa* m){
+int perdeu(mesa* m){ //função utilizada para verificar se o jogador perdeu o jogo
     int posicao;
 
     for(int linha=0; linha<MAX_LIN; linha++){
         for(int coluna=0; coluna<MAX_COL; coluna++){
             posicao = obter_posicao(coluna, linha);
-            if(m->item[posicao].cor == VAZIO)
+            if(m->item[posicao].cor == VAZIO) //caso o elemento seja VAZIO, o programa somente desconsidera essa iteração
                 continue;
             if(m->item[posicao].cor == m->item[m->item[posicao].acima].cor)
                 return 0;
@@ -218,11 +218,16 @@ int perdeu(mesa* m){
     return 1;
 }
 
+int aumenta_score(mesa* m, int pecas_antes){ //função usada para aumentar o score do jogador
+    return (pecas_antes - m->qntd) * (pecas_antes - m->qntd);
+} //o score é dado pelo tanto de peças removidas na jogada ao quadrado
+
 int main(){
 	mesa Jogo;
 	int linha = 0, coluna = 0;
 	int dificuldade = 0, x;
 	int jogadas = 0, time_ini, time_fim;
+	int qntd_pecas_atual, score = 0;
 
 	while(dificuldade == 0){
 	    system("clear");
@@ -234,6 +239,7 @@ int main(){
 	
 	prepara_mesa(&Jogo, dificuldade);
 	mostra_mesa(&Jogo);
+    cout << "    Score: " << score << endl << endl;
 	time_ini = time(NULL);
 
 	do{
@@ -241,20 +247,27 @@ int main(){
 		x = scanf("%d", &linha);
 		while(x != 1){
 		    __fpurge(stdin);
+            cout << "Linha: ";
             x = scanf("%d", &linha);
         }
 		cout << "Coluna: ";
 		x = scanf("%d", &coluna);
 		while(x != 1){
             __fpurge(stdin);
+            cout << "Coluna: ";
             x = scanf("%d", &coluna);
         }
+
 		if(linha >= MAX_LIN || coluna >= MAX_COL || linha < 0 || coluna < 0)
 			continue;
+
+		qntd_pecas_atual = Jogo.qntd;
 		remove_itens(&Jogo, obter_posicao(coluna, linha), 0);
 		reorganiza_coluna(&Jogo);
 		system("clear");
 		mostra_mesa(&Jogo);
+		score += aumenta_score(&Jogo, qntd_pecas_atual);
+		cout << "    Score: " << score << endl << endl;
 		jogadas++;
 	}while(!mesa_vazia(&Jogo) && !perdeu(&Jogo));
 	time_fim = time(NULL);
@@ -266,4 +279,6 @@ int main(){
 
 	cout << "\nESTATÍSTICAS: " << endl << "Jogadas: " << jogadas << endl;
 	cout << "Tempo de jogo: " << ((time_fim - time_ini)%3600)/60 << "min:" << ((time_fim - time_ini)%3600)%60 << "seg" << endl;
+	cout << "Peças restantes: " << Jogo.qntd << endl;
+	cout << "Score final: " << score << endl;
 }
