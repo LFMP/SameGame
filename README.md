@@ -1,1 +1,1 @@
-SameGame developed with C++
+# SameGame developed with C/C++
